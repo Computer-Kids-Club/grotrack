@@ -13,7 +13,7 @@ $handsani = "067153948160";
 $granola = "060383046019";
 
 $xml = json_decode(file_get_contents("https://world.openfoodfacts.org/api/v0/product/$examplebarcode.json"));
-var_dump($xml);
+// var_dump($xml);
 // echo json_encode($xml, JSON_PRETTY_PRINT);
 
 echo "<br><br><br>";

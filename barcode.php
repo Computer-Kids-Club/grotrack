@@ -22,6 +22,9 @@ Barcode: <input type="text" name="barcode"><br>
     <video id="video" width="600" height="400" style="border: 1px solid gray"></video>
 </div>
 
+
+
+
 <div id="sourceSelectPanel" style="display:none">
     <label for="sourceSelect">Change video source:</label>
     <select id="sourceSelect" style="max-width:400px">
@@ -30,7 +33,8 @@ Barcode: <input type="text" name="barcode"><br>
 
 <label>Result:</label>
 <pre><code id="result"></code></pre>
-<input type="submit" name="submitBarcode" value="Enter">
+<!-- <input type="submit" name="enterBarcode" value="Enter"> -->
+<button type="button" name="enterBarcode">Enter</button>
 
 <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
     <script type="text/javascript">
@@ -61,7 +65,8 @@ Barcode: <input type="text" name="barcode"><br>
                     document.getElementById('startButton').addEventListener('click', () => {
                         codeReader.decodeOnceFromVideoDevice(selectedDeviceId, 'video').then((result) => {
                             console.log(result)
-                            document.getElementById('result').textContent = result.text
+                            // document.getElementById('result').textContent = result.text
+                            window.location.href="barcode.php?barcode="+result.text
                         }).catch((err) => {
                             console.error(err)
                             document.getElementById('result').textContent = err
@@ -88,9 +93,14 @@ $handsani = "067153948160";
 $granola = "060383046019";
 $tuna = "8004030044005";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['submitBarcode'])) {
-        $barcode = $_POST["barcode"];
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // if (isset($_POST['submitBarcode'])) {
+    if (isset($_POST['enterBarcode'])) {
+        echo "hi";
+        // $barcode = $_POST["barcode"];
+        // $barcode = "8004030044005";
+        $barcode = $_GET["barcode"];
+        // $barcode = <code id="result"></code>;
         $xml = json_decode(file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json"));
         // var_dump($xml);
 
@@ -113,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "2";
         // Assume btnSubmit
     }
-}
+// }
 
 
 

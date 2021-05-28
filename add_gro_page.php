@@ -10,6 +10,10 @@
         table.mytable > tbody > tr > td {
             color: Black;
         }
+        table.mytable{
+            margin-left: auto;
+            margin-right: auto;
+}
 </style>
 <body>
 
@@ -20,6 +24,10 @@ $conn = new mysqli("localhost:8889", "groperson", "gropassword", "groceries");
 $query = "SELECT gro_name, gro_exp_date FROM your_groceries;";
 $results = $conn -> query($query);
 echo "<table border='1' class='mytable'>";
+echo'<tr>';
+echo "<td>" . '<b>Grocery Item</b>' . "</td>";
+echo "<td>" . '<b>Expiration Date</b>' . "</td>";
+echo'</tr>';
 while($row = mysqli_fetch_assoc($results)) {
     echo'<tr>';
     echo "<td>" . $row['gro_name'] . "</td>";

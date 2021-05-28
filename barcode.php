@@ -7,19 +7,25 @@
 
 <h1>GroTrack</h1>
 
-<!-- <form action="barcode.php" method="post">
-Barcode: <input type="text" name="barcode"><br>
-<input type="submit" name="submitBarcode" value="Enter">
-</form> -->
+<!-- // $examplebarcode = "737628064502";
+// $handsani = "067153948160";
+// $granola = "060383046019";
+// $tuna = "8004030044005"; -->
 
 <!-- <a class="button" id="startButton">Click To Start Scanning Barcode</a> -->
 <?php
-if (!isset($_GET['bc'])) {
+if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 ?>
 
 <button type="button" id="startButton">Scan Barcode</button>
 <button type="button" id="resetButton">Reset</button>
 <br>
+
+<form action="barcode.php" method="post">
+Barcode: <input type="text" name="barcode"><br>
+<input type="submit" name="submitBarcode" value="Enter">
+</form>
+
 <!-- <a class="button" id="resetButton">Reset Barcode</a> -->
 
 <div>
@@ -90,37 +96,44 @@ if (!isset($_GET['bc'])) {
 
 <?php
 } else {
-// echo "hi";
-// $barcode = $_POST["barcode"];
-// $barcode = "8004030044005";
-$barcode = $_GET["bc"];
-// $barcode = <code id="result"></code>;
-$xml = json_decode(file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json"));
-// var_dump($xml);
+    // echo "hi";
+    // $barcode = $_POST["barcode"];
+    // $barcode = "8004030044005";
+    if(isset($_GET['bc'])) {
+        $barcode = $_GET["bc"];
+    } else {
+        $barcode = $_POST['barcode'];
+        // echo $barcode;
+    }
 
-$name = ucwords($xml->product->product_name);
-echo "<h2>$name</h2>";
-$image = urldecode($xml->product->image_front_small_url);
-$imageData = base64_encode(file_get_contents($image));
-echo '<img src="data:image/jpeg;base64,'.$imageData.'">';
-echo "<br>";
-$keywords = json_encode($xml->product->_keywords);
-// echo $keywords;
-$nutrients = json_encode($xml->product->nutriments);
-echo "Nutritional Facts: $nutrients";
+    // echo "$barcode       $barcode2";
+    // $barcode = <code id="result"></code>;
+    $xml = json_decode(file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json"));
+    // var_dump($xml);
 
-$ingredients = json_encode($xml->product->ingredients_text_en);
-echo "<br><br>";
-$ingredients = str_replace(['"',"'"], "", $ingredients);
-echo "Ingredients: $ingredients";
+    $name = ucwords($xml->product->product_name);
+    echo "<h2>$name</h2>";
+    $image = urldecode($xml->product->image_front_small_url);
+    $imageData = base64_encode(file_get_contents($image));
+    echo '<img src="data:image/jpeg;base64,'.$imageData.'">';
+    echo "<br>";
+    $keywords = json_encode($xml->product->_keywords);
+    // echo $keywords;
+    $nutrients = json_encode($xml->product->nutriments);
+    echo "Nutritional Facts: $nutrients";
+
+    $ingredients = json_encode($xml->product->ingredients_text_en);
+    echo "<br><br>";
+    $ingredients = str_replace(['"',"'"], "", $ingredients);
+    echo "Ingredients: $ingredients";
 }
 
 
 
-$examplebarcode = "737628064502";
-$handsani = "067153948160";
-$granola = "060383046019";
-$tuna = "8004030044005";
+// $examplebarcode = "737628064502";
+// $handsani = "067153948160";
+// $granola = "060383046019";
+// $tuna = "8004030044005";
 
 // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // if (isset($_POST['submitBarcode'])) {

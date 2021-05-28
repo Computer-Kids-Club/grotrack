@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+<h1 class = "title">Grotrack</h1>
 <style type="text/css">
         table.mytable {
             border: 1px solid Green;
@@ -9,18 +11,25 @@
         }
         table.mytable > tbody > tr > td {
             color: Black;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
         }
         table.mytable{
             margin-left: auto;
             margin-right: auto;
+        }
+        h1.title {
+            font-family: Arial, Helvetica, sans-serif;
+            color: Green
+
+        }
 }
 </style>
 <body>
 
 <?php
 
-echo 'Hi this is add gro page';
-$conn = new mysqli("localhost:3306", "groperson", "gropassword", "groceries");
+$conn = new mysqli("localhost:8889", "groperson", "gropassword", "groceries");
 $query = "SELECT gro_name, gro_exp_date FROM your_groceries;";
 $results = $conn -> query($query);
 echo "<table border='1' class='mytable'>";

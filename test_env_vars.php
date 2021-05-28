@@ -4,11 +4,9 @@
 
 <?php
 
-print_r(ini_get_all());
-
 echo "<br>here ->";
 
-$gro_env = ini_get("grotrack_env");
+$gro_env = getenv("GROTRACK_ENV");
 echo $gro_env;
 
 echo "<- after here<br>";

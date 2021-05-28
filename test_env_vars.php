@@ -7,7 +7,7 @@
 
 echo "here ->";
 
-$gro_env = $_ENV["GRO_ENV"];
+$gro_env = ini_get("GRO_ENV");
 echo $gro_env;
 
 echo "<- after here<br>";

@@ -11,14 +11,17 @@
 
 <div class="container is-max-widescreen">
 <div class="notification is-primary has-text-centered">
-
     
     <h1 class='is-size-1'>
 
         Your UUID is :
         <div class="box">
         <?php
-            echo '6sfg51d2dfg54';
+            $body = file_get_contents('php://input');
+
+            parse_str($body, $parsed_body);
+            
+            echo $parsed_body['uuid'];
         ?>  
         </div>
     

@@ -60,7 +60,10 @@
 //echo 'Hi';
 
 ?>  
-
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
 <script type="text/javascript">
 
 const login_url = "/login.php";
@@ -84,6 +87,7 @@ function onClickLogin() {
     }));
     xhr.onload = function () {
         console.log("Got Login Response!");
+        //console.log("Response: " + xhr.responseText);
 
         var response_obj = JSON.parse(xhr.responseText);
 
@@ -125,7 +129,15 @@ function onClickSignup() {
         console.log("Response: " + response_obj.success);
 
         if(response_obj.success) {
-            window.location.href = '/signup_success.php';
+
+            var url = '/signup_success.php';
+            var form = $('<form action="' + url + '" method="post">' +
+            '<input type="text" name="uuid" value="' + response_obj.uuid + '" />' +
+            '</form>');
+            $('body').append(form);
+
+            form.submit();
+
         } else {
             signup_button.classList.remove("is-loading");
             signup_textbox.classList.add("is-danger");

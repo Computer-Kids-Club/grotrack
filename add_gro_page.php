@@ -29,6 +29,10 @@
 
 <?php
 
+$host = "localhost:8889";
+if (!is_null($_SERVER["SERVER_NAME"]) && $_SERVER["SERVER_NAME"] ===  "www.grotrack.co") {    
+    $host = "localhost:3306";
+}
 $conn = new mysqli("localhost:8889", "groperson", "gropassword", "groceries");
 $query = "SELECT gro_name, gro_exp_date FROM your_groceries;";
 $results = $conn -> query($query);

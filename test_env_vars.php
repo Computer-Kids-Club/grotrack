@@ -6,8 +6,7 @@
 
 echo "<br>here ->";
 
-$gro_env = getenv("GROTRACK_ENV");
-echo $gro_env;
+var_dump(getenv("GROTRACK_ENV"));
 
 echo "<- after here<br>";
 

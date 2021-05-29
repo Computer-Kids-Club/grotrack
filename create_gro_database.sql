@@ -13,7 +13,7 @@ CREATE TABLE users(
 CREATE TABLE groceries(
     id INT AUTO_INCREMENT,
     barcode VARCHAR(50),
-    name VARCHAR(20),
+    name VARCHAR(100),
     amount INT,
     exp_date DATE,
     user_id INT,

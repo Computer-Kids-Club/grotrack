@@ -3,14 +3,25 @@ GRANT ALL ON groceries.* TO 'groperson'@'localhost';
 
 USE groceries;
 
-CREATE TABLE your_groceries(
-    gro_id INT AUTO_INCREMENT,
-    gro_barcode VARCHAR(50),
-    gro_name VARCHAR(20),
-    gro_amount INT,
-    gro_exp_date DATE,
-    PRIMARY KEY(gro_id)
+CREATE TABLE users(
+    id INT AUTO_INCREMENT,
+    name VARCHAR(20),
+    uuid VARCHAR(23),
+    PRIMARY KEY(id)
 );
+
+CREATE TABLE groceries(
+    id INT AUTO_INCREMENT,
+    barcode VARCHAR(50),
+    name VARCHAR(20),
+    amount INT,
+    exp_date DATE,
+    user_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+
 
 
 -- run once --

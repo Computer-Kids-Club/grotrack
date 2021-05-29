@@ -19,6 +19,6 @@ else {
     $queryDel->bind_param("s", $id);
     $queryDel->execute();
 }
-header("Location: add_gro_page.php");
+header("Location: add_gro_page.php?no_msg=4");
 
 ?>

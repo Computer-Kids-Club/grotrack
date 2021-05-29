@@ -41,7 +41,7 @@ if (!is_null($_SERVER["SERVER_NAME"]) && $_SERVER["SERVER_NAME"] ===  "www.grotr
 }
 $conn = new mysqli($host, "groperson", "gropassword", "groceries");
 $uuid = $session_uuid;
-$query = "SELECT * FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."';";
+$query = "SELECT groceries.id, groceries.name, groceries.amount, groceries.exp_date FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."';";
 $results = $conn -> query($query);
 $almost_expired = array();
 date_default_timezone_set('America/Toronto');
@@ -57,7 +57,7 @@ while($row = mysqli_fetch_assoc($results)) {
     echo "<td>" . $row['name'] . "</td>";
     echo "<td>" . $row['amount'] . "</td>";
     echo "<td>" . $row['exp_date'] . "</td>";
-    echo "<td>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['user_id'].'" class="button is-outlined is-small is-primary mb-1"> Consume </button></form>' . "</td>";
+    echo "<td>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['id'].'" class="button is-outlined is-small is-primary mb-1"> Consume </button></form>' . "</td>";
     echo "</tr>";
     $date = date('Y-m-d H:i:s');
     //if(($date - $row['exp_date'])/86400){

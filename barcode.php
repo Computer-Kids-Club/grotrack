@@ -15,6 +15,7 @@ $cheerios =  -->
 
 <!-- <a class="button" id="startButton">Click To Start Scanning Barcode</a> -->
 <?php
+$barcode = 0;
 if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 ?>
 
@@ -257,10 +258,40 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 }
 
 ?>
-<button>Add To Groceries</button>
+<br>
+<label for="quantity">Quantity:</label>
+<input type="number" id="quantity" name="quantity" min="1">
+<br>
+<label for="expiration">Expiration Date:</label>
+<input type="date" id="expiration" name="expiration">
+<br>
+<form action="barcode.php" method="post">
+    <input type="submit" name="submitAdd" value="Enter">
+</form>
+
 <form action="https://grotrack.co/barcode.php">
     <input type="submit" value="Go Back" />
 </form>
+
+<?php
+if(isset($_POST["submitAdd"])) {
+    $host = "localhost:3306";
+    $conn = new mysqli($host, "groperson", "gropassword", "groceries");
+    // $query = "SELECT id, name, amount, exp_date FROM groceries;";
+    $quantity = $_POST['quantity'];
+    $expr_date = date('Y-m-d', strtotime($_POST['expiration']));
+    $uuid = "GRO-60b2b1d74df73";
+    // $uuid = $session_uuid;
+
+    $idQuery = "SELECT id FROM users WHERE uuid='$uuid'";
+    $results = $conn -> query($idQuery);
+    $row = mysqli_fetch_assoc($results);
+    $id = $row["id"];
+
+    $query = "INSERT INTO groceries VALUES (NULL, '$barcode', '$name', '$quantity', '$expr_date', '$id')";
+    $results = $conn -> query($query);
+}
+?>
 
 </body>
 </html>

@@ -17,6 +17,8 @@ $cheerios =  -->
 
 <!-- <a class="button" id="startButton">Click To Start Scanning Barcode</a> -->
 <?php
+$barcode = 0;
+$name = NULL;
 if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 ?>
 
@@ -131,81 +133,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
         <td colspan="3" class="small-info">
         </td>
       </tr>
-                                    <!-- <tr>
-                                        <th colspan="2">
-                                        <b>Total Fat</b>
-                                        14g
-                                        </th>
-                                    </tr> -->
-      <!-- <tr> -->
-        <!-- <td class="blank-cell">
-        </td>
-        <th>
-          Saturated Fat
-          9g
-        </th>
-        <td>
-          <b>22%</b>
-        </td>
-      </tr>
-      <tr>
-        <td class="blank-cell">
-        </td>
-        <th>
-          Trans Fat
-          0g
-        </th>
-        <td>
-        </td> -->
-      <!-- </tr> -->
-                                                    <!-- <tr>
-                                                        <th colspan="2">
-                                                        <b>Cholesterol</b>
-                                                        55mg
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th colspan="2">
-                                                        <b>Sodium</b>
-                                                        40mg
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th colspan="2">
-                                                        <b>Total Carbohydrate</b>
-                                                        17g
-                                                        </th>
-                                                    </tr> -->
-      <!-- <tr> -->
-        <!-- <td class="blank-cell">
-        </td>
-        <th>
-          Dietary Fiber
-          1g
-        </th>
-        <td>
-          <b>4%</b>
-        </td>
-      </tr>
-      <tr>
-        <td class="blank-cell">
-        </td>
-        <th>
-          Sugars
-          14g
-        </th>
-        <td>
-        </td> -->
-      <!-- </tr> -->
-      <!-- <tr class="thick-end"> -->
-                                                    <!-- <th colspan="2">
-                                                    <b>Protein</b>
-                                                    3g
-                                                    </th> -->
-    <!-- </tbody>
-  </table> -->
 
-<!-- </section> -->
     <?php
     $prevKey = "";
     $prevValue = 0;
@@ -213,21 +141,13 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     foreach($nutrients as $key => $value) {
         if(strpos($key, "nova") === false && strpos($key, "_100g") === false && (strpos($key, "_value") !== false || strpos($key, "_unit") !== false) && $key != "energy-kj" &&
         strpos($key, "nutrition") === false && strpos($key, "_serving") === false && strpos($key, "energy") === false) {
-            // if(strpos($key, "_unit") !== false) {
-                // if($prev != "energy-kcal")echo $value;
-            // } else {
-                // echo "<br>";
-                // if($key == "energy-kcal") echo "Calories ", $value;
-                // if(round($value, 1) != 0) {
                 if(strpos($prevKey, "_unit") !== false) {
                     $unit = $prevValue;
                 } else {
                     $unit = "";
                 }
-
                 if(strpos($key, "_value") !== false) {
                 ?>
-
                 <tr>
                     <th colspan="2">
                         <b><?php echo ucwords(str_replace("_value", "", $key)) ?></b>
@@ -236,11 +156,8 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
                 </tr>
                 <?php
                 }
-                
-                // echo ucwords($key), " ", $value;
                 $prevKey = $key;
                 $prevValue = $value;
-            // }
         }
     }
 
@@ -259,10 +176,59 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 }
 
 ?>
-<button>Add To Groceries</button>
-<form action="https://grotrack.co/barcode.php">
-    <input type="submit" value="Go Back" />
+<!-- <br>
+
+
+<br>
+
+<br>
+<form action="barcode.php" method="post">
+    
+</form> -->
+
+<form action = "barcode.php" method="post">
+    <label for="quantity">Quantity:</label>
+    <input name="name" value="<?php echo $name; ?>" type="hidden"></input>
+    <input name="barcode" value="<?php echo $barcode; ?>" type="hidden"></input>
+    <input type="number" id="quantity" name="quantity" min="1">
+    <label for="expiration">Expiration Date:</label>
+    <input type="date" id="expiration" name="expiration">
+    <input type="submit" name="submitAdd" value="Enter">
+    <input type="submit" value="Go Back">
 </form>
+
+
+
+<?php
+if(isset($_POST["submitAdd"])) {
+    $quantity = $_POST['quantity'];
+    $expr_date = date('Y-m-d', strtotime($_POST['expiration']));
+    $name = $_POST['name'];
+    $barcode = $_POST['barcode'];
+
+    // var_dump($_POST);
+
+    $host = "localhost:3306";
+    $conn = new mysqli($host, "groperson", "gropassword", "groceries");
+    // $query = "SELECT id, name, amount, exp_date FROM groceries;";
+    // $uuid = "GRO-60b2b1d74df73";
+    $uuid = $session_uuid;
+
+    $idQuery = "SELECT id FROM users WHERE uuid='$uuid'";
+    $results = $conn -> query($idQuery);
+    $row = mysqli_fetch_assoc($results);
+    $id = $row["id"];
+    // echo "tests ", $name, "     daw ", $barcode;
+    // echo "Quantity: ", $quantity, " Expiration: ". $expr_date, " Name: ", $name, " Barcode: ", $barcode;
+
+
+
+    $query = "INSERT INTO groceries VALUES (NULL, '$barcode', '$name', '$quantity', '$expr_date', '$id')";
+    var_dump($query);
+    $results = $conn -> query($query);
+    // var_dump($results);
+}
+?>
 
 </body>
 </html>

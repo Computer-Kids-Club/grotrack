@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-<h1 class='has-background-success-light is-size-1 pl-6'>Grotrack</h1>
-<!-- <style type="text/css">
+<!-- <h1 class='has-background-success-light is-size-1 pl-6'>Grotrack</h1>
+<style type="text/css">
         table.mytable {
             border: 1px solid Green;
         }
@@ -32,6 +32,7 @@
     }
 </style>
 <body class = "has-background-success-light">
+<?php include 'header.php';?>
 <?php
 
 $host = "localhost:3306";

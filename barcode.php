@@ -3,10 +3,12 @@
 <title>GroTrack</title>
 <head>
     <link rel="stylesheet" href="coolertable.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+
 </head>
 <body>
 
-<h1>GroTrack</h1>
+<?php include 'header.php';?>
 
 <!-- // $examplebarcode = "737628064502";
 // $granola = "060383046019";

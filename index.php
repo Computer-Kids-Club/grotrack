@@ -2,6 +2,16 @@
 <html>
 <body>
 
+<?php 
+
+include 'session.php';
+
+if($_SESSION["uuid"]) {
+    header("Location: /add_gro_page.php");
+}
+
+?>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 <div class="container is-max-widescreen">
   <div class="notification is-primary has-text-centered">

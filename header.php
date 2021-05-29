@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 
+<?php include 'session.php';?>
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item is-size-3" href="/">
@@ -22,16 +24,33 @@
     </div>
 
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary" href="/">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light" href="/">
-            Log in
-          </a>
+        <?php
+        if($_SESSION["uuid"]) {
+        ?>
+        <div class="navbar-item">
+            <div class="buttons">
+                <a class="button is-light" href="/logout.php">
+                    Log out
+                </a>
+            </div>
         </div>
-      </div>
+        <?php
+        } else {
+        ?>
+        <div class="navbar-item">
+            <div class="buttons">
+                <a class="button is-primary" href="/">
+                    <strong>Sign up</strong>
+                </a>
+                <a class="button is-light" href="/">
+                    Log in
+                </a>
+            </div>
+        </div>
+        <?php
+        }
+        ?>
+      
     </div>
   </div>
 </nav>

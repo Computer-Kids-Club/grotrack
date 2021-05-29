@@ -40,10 +40,11 @@ if (!is_null($_SERVER["SERVER_NAME"]) && $_SERVER["SERVER_NAME"] ===  "www.grotr
     $host = "localhost:3306";
 }
 $conn = new mysqli($host, "groperson", "gropassword", "groceries");
-//$uuid = ???
-//$query = "SELECT groceries.name, groceries.exp_date FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid';";
-$query = "SELECT id, name, amount, exp_date FROM groceries;";
+$uuid = $session_uuid;
+$query = "SELECT * FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."';";
 $results = $conn -> query($query);
+$almost_expired = array();
+date_default_timezone_set('America/Toronto');
 echo "<table class = 'has-text-centered has-background-success-light mytable'>";
 echo "<tr>";
 echo "<td>" . '<div class = "is-size-3 mx-3"> Grocery Item </div>' . "</td>";
@@ -58,11 +59,15 @@ while($row = mysqli_fetch_assoc($results)) {
     echo "<td>" . $row['exp_date'] . "</td>";
     echo "<td>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['id'].'" class="button is-outlined is-small is-primary mb-1"> Consume </button></form>' . "</td>";
     echo "</tr>";
+    $date = date('Y-m-d H:i:s');
+    //if(($date - $row['exp_date'])/86400){
+     //   array_push($almost_expired, $row['exp_date']);
+    //}
 }
 echo "</table>";
 ?>
 <br/>
-<p class="pl-6">Click <a href="barcode.php">here</a> to scan a new grocery product, or add one manually</p>
+<p class="pl-4">Click <a href="barcode.php">here</a> to scan a new grocery product, or add one manually</p>
 </body>
 </html>
 

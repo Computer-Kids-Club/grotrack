@@ -29,7 +29,11 @@
 
 <?php
 
-$conn = new mysqli("localhost:3306", "groperson", "gropassword", "groceries");
+$host = "localhost:8889";
+if ($_SERVER["SERVER_NAME"] ==  "www.grotrack.co") {    
+    $host = "localhost:3306";
+}
+$conn = new mysqli($host, "groperson", "gropassword", "groceries");
 $query = "SELECT gro_name, gro_exp_date FROM your_groceries;";
 $results = $conn -> query($query);
 echo "<table border='1' class='mytable'>";

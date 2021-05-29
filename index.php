@@ -17,11 +17,12 @@
     <div class="control">
         <input id="login_textbox" class="input" type="text" placeholder="your uuid here">
     </div>
+    <p id="login_invalid" class="help is-danger" style="display: none">This UUID is invalid.</p>
     </div>
 
     <div class="field is-grouped">
     <div class="control">
-        <button id="login_button" class="button is-link" onclick="onClickLogin()">Login</button>
+        <button id="login_button" class="button is-link" onclick="onClickLogin()" disabled>Login</button>
     </div>
     </div>
   </div>
@@ -33,9 +34,9 @@
     <div class="field">
     <label class="label">Name</label>
     <div class="control">
-        <input id="signup_textbox" class="input is-warning" type="text" placeholder="your name here" value="">
+        <input id="signup_textbox" class="input" type="text" placeholder="your name here" value="">
     </div>
-    <p class="help is-warning">This name might be valid.</p>
+    <p id="signup_invalid" class="help is-danger" style="display: none">This name is invalid.</p>
     </div>
 
     <div class="field">
@@ -56,20 +57,108 @@
 </div>
 <?php
 
-echo 'Hi';
+//echo 'Hi';
 
 ?>  
-
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
 <script type="text/javascript">
+
+const login_url = "/login.php";
+const signup_url = "/signup.php";
 
 function onClickLogin() {
     console.log("Login Clicked!");
+
+    let login_invalid = document.getElementById("login_invalid")
+    let login_button = document.getElementById("login_button")
+    let login_textbox = document.getElementById("login_textbox")
+    let login_text = login_textbox.value
+
+    login_button.classList.add("is-loading");
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", login_url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        uuid: login_text
+    }));
+    xhr.onload = function () {
+        console.log("Got Login Response!");
+        //console.log("Response: " + xhr.responseText);
+
+        var response_obj = JSON.parse(xhr.responseText);
+
+        console.log("Response: " + response_obj.success);
+
+        if(response_obj.success) {
+            window.location.href = '/add_gro_page.php';
+        } else {
+            login_button.classList.remove("is-loading");
+            login_textbox.classList.add("is-danger");
+            login_invalid.style.display = 'block';
+            
+        }
+    };
 }
 
 function onClickSignup() {
     console.log("Signup Clicked!");
-    let terms_checked = document.getElementById("checkbox_terms").checked
-    console.log("Signup terms: " + terms_checked);
+    
+    let signup_invalid = document.getElementById("signup_invalid")
+    let signup_button = document.getElementById("signup_button")
+    let signup_textbox = document.getElementById("signup_textbox")
+    let signup_text = signup_textbox.value
+
+    signup_button.classList.add("is-loading");
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", signup_url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        name: signup_text
+    }));
+    xhr.onload = function () {
+        console.log("Got Signup Response!");
+        console.log("Response: " + xhr.responseText);
+
+        var response_obj = JSON.parse(xhr.responseText);
+
+        console.log("Response: " + response_obj.success);
+
+        if(response_obj.success) {
+
+            var url = '/signup_success.php';
+            var form = $('<form action="' + url + '" method="post">' +
+            '<input type="text" name="uuid" value="' + response_obj.uuid + '" />' +
+            '</form>');
+            $('body').append(form);
+
+            form.submit();
+
+        } else {
+            signup_button.classList.remove("is-loading");
+            signup_textbox.classList.add("is-danger");
+            signup_invalid.style.display = 'block';
+            
+        }
+    };
+}
+
+function checkLoginValid() {
+    let login_text = document.getElementById("login_textbox").value
+
+    let login_button = document.getElementById("login_button")
+    
+    if(login_text) {
+        console.log("Login Check: OK!");
+        login_button.disabled = false;
+    } else {
+        console.log("Login Check: FAILED!");
+        login_button.disabled = true;
+    }
 }
 
 function checkSignupValid() {
@@ -91,6 +180,9 @@ function checkSignupValid() {
 
 window.onload = () => {
     console.log("Hello world!");
+
+    const login_textbox = document.getElementById('login_textbox');
+    login_textbox.addEventListener('input', checkLoginValid);
 
     const signup_textbox = document.getElementById('signup_textbox');
     signup_textbox.addEventListener('input', checkSignupValid);

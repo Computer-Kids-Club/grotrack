@@ -29,7 +29,7 @@ Barcode: <input type="text" name="barcode"><br>
 <!-- <a class="button" id="resetButton">Reset Barcode</a> -->
 
 <div>
-    <video id="video" width="600" height="400" style="border: 1px solid gray"></video>
+    <canvas id="canvas" width="600" height="400" style="border: 1px solid gray"></canvas>
 </div>
 
 <div id="sourceSelectPanel" style="display:none">
@@ -42,7 +42,7 @@ Barcode: <input type="text" name="barcode"><br>
 <pre><code id="result"></code></pre>
 <!-- <input type="submit" name="enterBarcode" value="Enter"> -->
 
-<script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+<!-- <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
     <script type="text/javascript">
         window.addEventListener('load', function () {
             let selectedDeviceId;
@@ -92,6 +92,37 @@ Barcode: <input type="text" name="barcode"><br>
                     console.error(err)
                 })
         })
+    </script> -->
+
+    <hr>
+        <select></select>
+        <hr>
+        <ul></ul>
+ 
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/qrcodelib.js"></script>
+    <script type="text/javascript" src="js/webcodecamjquery.js"></script>
+    <script type="text/javascript">
+        var count = 0;
+        var arg = {
+            resultFunction: function(result) {
+                count++;
+                if(count % 3 == 0) {
+                    window.location.href="barcode.php?bc="+result.code
+                }
+                $('body').append($('<li>' + result.format + ': ' + result.code + '</li>'));
+            }
+        };
+        var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
+        decoder.buildSelectMenu("select");
+    decoder.play();
+        
+        /*  Without visible select menu
+            decoder.buildSelectMenu(document.createElement('select'), 'environment|back').init(arg).play();
+        */
+        $('select').on('change', function(){
+            decoder.stop().play();
+        });
     </script>
 
 <?php
@@ -105,6 +136,8 @@ Barcode: <input type="text" name="barcode"><br>
         $barcode = $_POST['barcode'];
         // echo $barcode;
     }
+
+    // echo $barcode;
 
     // echo "$barcode       $barcode2";
     // $barcode = <code id="result"></code>;

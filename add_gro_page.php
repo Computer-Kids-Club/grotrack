@@ -60,6 +60,8 @@ while($row = mysqli_fetch_assoc($results)) {
 }
 echo "</table>";
 ?>
+<br/>
+<p class="pl-6">Click <a href="barcode.php">here</a> to scan a new grocery product, or add one manually</p>
 </body>
 </html>
 

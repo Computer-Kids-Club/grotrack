@@ -103,8 +103,7 @@ else if($num_expiring > 1 && !$_GET['no_msg']){
     }
 }
 ?>
-<br/>
-<p class="pl-4">Click <a href="barcode.php">here</a> to scan a new grocery product, or add one manually</p>
+
 </body>
 </html>
 

@@ -163,7 +163,7 @@
 
     function beep() {
         if (Self.options.beep) {
-            beepSound.play();
+            // beepSound.play();
         }
     }
 

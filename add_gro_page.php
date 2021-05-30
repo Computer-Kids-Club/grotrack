@@ -171,7 +171,11 @@ while($row = mysqli_fetch_assoc($results)) {
 
                 //console.log(response_obj.product.image_front_small_url);
 
-                img_obj.src = response_obj.product.image_front_small_url;
+                if(response_obj.product.image_front_small_url) {
+                    img_obj.src = response_obj.product.image_front_small_url;
+                } else {
+                    img_obj.src = "/carrot.png";
+                }
 
             } catch(err) {
                 console.error(err);

@@ -75,9 +75,16 @@ window.onload = function() {
 <?php include 'header.php';?>
 <?php
 
+$is_dec = False;
+$temp = $_GET['sort_by'];
+if(isset($_GET['sort_by']) && substr($_GET['sort_by'], -3) == "dec"){
+    $is_dec = True;
+    $temp = substr($_GET['sort_by'], 0, -3);
+}
+
 $sort_by = "name";
 if(isset($_GET["sort_by"])){
-    $sort_by = $_GET["sort_by"];
+    $sort_by = $temp;
 }
 
 
@@ -90,6 +97,9 @@ $conn = new mysqli($host, "groperson", "gropassword", "groceries");
 
 $uuid = $session_uuid;
 $query = "SELECT groceries.id, groceries.name, groceries.amount, groceries.exp_date, groceries.barcode FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."' ORDER BY groceries.".$sort_by.";";
+if($is_dec){
+    $query = "SELECT groceries.id, groceries.name, groceries.amount, groceries.exp_date, groceries.barcode FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."' ORDER BY groceries.".$sort_by." DESC;";
+}
 $results = $conn -> query($query);
 
 
@@ -103,17 +113,25 @@ $date = date('Y-m-d H:i:s');
 
 echo "<table class = 'has-text-centered has-background-success-light mytable'>";
 echo "<tr>";
-//if(isset($_GET(['sort_by'])) && $_GET(['sort_by']) == "name"){
-    //echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="namedec" class ="button is-ghost is-large"><div class="is-size-3"> Grocery Item </div></button></form></div>' . "</td>";
-//}
-//else{
+if($_GET['sort_by'] == 'name'){
+    echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="namedec" class ="button is-ghost is-large"><div class="is-size-3"> Grocery Item </div></button></form></div>' . "</td>";
+}
+else{
     echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="name" class ="button is-ghost is-large"><div class="is-size-3"> Grocery Item </div></button></form></div>' . "</td>";
-//}
+}
 echo "<td>" . '<div class = "mx-3 mb-5"><button class ="button is-ghost is-large"><div class="is-size-3"> Preview Item </div></button></div>' . "</td>";
-echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_date" class ="button is-ghost is-large"><div class="is-size-3"> Expiration Date </div></button></form></div>' . "</td>";
-//echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_datedec" class ="button is-ghost is-large"><div class="is-size-3"> Expiration Date </div></button></form></div>' . "</td>";
-echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amount" class ="button is-ghost is-large"><div class="is-size-3"> Amount </div></button></form></div>' . "</td>";
-//echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amountdec" class ="button is-ghost is-large"><div class="is-size-3"> Amount </div></button></form></div>' . "</td>";
+if($_GET['sort_by'] == 'exp_date'){
+    echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_datedec" class ="button is-ghost is-large"><div class="is-size-3"> Expiration Date </div></button></form></div>' . "</td>";
+}
+else{
+    echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_date" class ="button is-ghost is-large"><div class="is-size-3"> Expiration Date </div></button></form></div>' . "</td>";
+}
+if($_GET['sort_by'] == 'amount'){
+    echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amountdec" class ="button is-ghost is-large"><div class="is-size-3"> Amount </div></button></form></div>' . "</td>";
+}
+else{
+    echo "<td>" . '<div class = "mx-3 mb-5"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amount" class ="button is-ghost is-large"><div class="is-size-3"> Amount </div></button></form></div>' . "</td>";
+}
 echo "<td>" . '<div class = "mx-3 mb-5"><button class ="button is-ghost is-large"><div class="is-size-3"> Consume </div></button></div>' . "</td>";
 echo "</tr>";
 

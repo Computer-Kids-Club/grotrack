@@ -138,7 +138,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
         <!-- <th colspan="2"> -->
           <b>Calories </b>
             <?php
-            echo "<b>", $nutrients->{'energy-kcal'}, "<b>";
+            echo "<b>", round($nutrients->{'energy-kcal'}, 1), "<b>";
             unset($nutrients->{'energy-kcal'});
             ?>
       <tr class="thick-row">

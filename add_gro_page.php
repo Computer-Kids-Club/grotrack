@@ -114,8 +114,8 @@ while($row = mysqli_fetch_assoc($results)) {
     ?><script type="text/javascript">
 
     funcs.push(() => {
-        let barcode = <?php echo $barcode; ?>;
-        let id = <?php echo $id; ?>;
+        let barcode = "<?php echo $barcode; ?>";
+        let id = "<?php echo $id; ?>";
         let img_obj = document.getElementById("img_" + id);
 
         let url = "https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json";

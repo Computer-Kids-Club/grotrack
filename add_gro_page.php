@@ -37,6 +37,17 @@
     }
 </style>
 <body class = "has-background-success-light">
+<script type="text/javascript">
+
+let funcs = [];
+
+window.onload = function() {
+    for (var key in funcs) {
+        funcs[key](); // run your function
+    }
+}
+
+</script>
 <?php include 'header.php';?>
 <?php
 
@@ -69,11 +80,39 @@ while($row = mysqli_fetch_assoc($results)) {
     echo"<tr>";
     echo "<td class='is-size-3'>" . $row['name'] . "</td>";
     $barcode = $row['barcode'];
-    $xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
-    $xml = json_decode($xml);
-    $image = urldecode($xml->product->image_front_small_url);
-    $imageData = base64_encode(file_get_contents($image));
-    echo '<td><img class="image is-96x96 my-2 has-img-centered" src="data:image/jpeg;base64,'.$imageData.'" width=300vw></td>';
+    //$xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
+    //$xml = json_decode($xml);
+    //$image = urldecode($xml->product->image_front_small_url);
+    //$imageData = base64_encode(file_get_contents($image));
+    echo '<td><img id="img_'.$barcode.'" class="image is-96x96 my-2 has-img-centered" width=300vw></td>';
+    ?><script type="text/javascript">
+
+    funcs.push(() => {
+        let barcode = <?php echo $barcode; ?>;
+        let img_obj = document.getElementById("img_" + barcode);
+
+        let url = "https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json";
+
+        //console.log(url);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.send();
+        xhr.onload = function () {
+            //console.log("Got Response!");
+            //console.log("Response: " + xhr.responseText);
+
+            var response_obj = JSON.parse(xhr.responseText);
+
+            //console.log(response_obj.product.image_front_small_url);
+
+            img_obj.src = response_obj.product.image_front_small_url;
+        };
+
+        img_obj.src = "/carrot.png";
+    });
+
+    </script><?php
     if($date_diff <= 1 && $date_diff > 0){
         echo "<td class='has-text-warning is-size-3'>" . $row['exp_date'] . "</td>";
     }
@@ -127,12 +166,6 @@ else{
     }
 }
 ?>
-<?php
-// $xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
-// $xml = json_decode($xml);
-// $image = urldecode($xml->product->image_front_small_url);
-// $imageData = base64_encode(file_get_contents($image));
-// echo '<p style="float: left;"><img src="data:image/jpeg;base64,'.$imageData.'" width=300vw></p>';?>
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 
+<title>GroTrack</title>
+
 <?php include 'session.php';?>
 
 <style type="text/css">
@@ -36,6 +38,9 @@
     }
  
 </style>
+
+<link rel="shortcut icon" type="image/png" href="/carrot.png"/>
+
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -90,6 +95,7 @@ function rand(min, max) {
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
+    <img src="/carrot.png" width="64" height="64">
     <a class="navbar-item is-size-3" href="/">
         Grotrack
     </a>

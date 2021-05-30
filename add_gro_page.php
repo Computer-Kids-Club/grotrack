@@ -102,6 +102,14 @@ else if($num_expiring > 1 && !$_GET['no_msg']){
         echo "<script type='text/javascript'>alert('You have $num_expiring grocery products expiring!');</script>";
     }
 }
+else{
+    if($num_expired == 1 && !$_GET['no_msg']){
+        echo "<script type='text/javascript'>alert('You have $num_expired grocery product expired!');</script>";
+    }
+    else if($num_expired > 1 && !$_GET['no_msg']){
+        echo "<script type='text/javascript'>alert('You have $num_expired grocery products expired!');</script>";
+    }
+}
 ?>
 
 </body>

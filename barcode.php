@@ -92,34 +92,27 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 
 <?php
 } else {
-    // echo "hi";
-    // $barcode = $_POST["barcode"];
-    // $barcode = "8004030044005";
     if(isset($_GET['bc'])) $barcode = $_GET["bc"];
     else $barcode = $_POST['barcode'];
-        // echo $barcode;
 
-    // echo $barcode;
-
-    // echo "$barcode       $barcode2";
-    // $barcode = <code id="result"></code>;
     $xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
     $xml = json_decode($xml);
 
     echo $xml->status;
     $url = "https://grotrack.co/barcode.php";
     if($xml->status != 1) header("Location: $url");
-    // var_dump($xml);
 
     $name = ucwords($xml->product->product_name);
+    echo "<div class='columns is-centered is-vcentered is-mobile'>";
     echo "<h2>$name</h2>";
+    echo "</div>";
     $image = urldecode($xml->product->image_front_small_url);
     $imageData = base64_encode(file_get_contents($image));
     ?>
-    <div class="center">
+    <!-- <div class="center"> -->
     <?php
+    echo "<div class='columns is-centered is-vcentered is-mobile'>";
     echo '<p style="float: left;"><img src="data:image/jpeg;base64,'.$imageData.'" width=300vw></p>';
-    // echo "<br>";
 
     // for searching later
     // $keywords = json_encode($xml->product->_keywords);
@@ -184,32 +177,35 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
             </tbody>
         </table>
     </section>
+    
 </div>
 
 <br>
 
 <form action = "barcode.php" method="post">
+<div class="columns is-centered is-vcentered is-mobile">
     <label for="quantity">Quantity:</label>
     <input class="input is-primary" type="number" id="quantity" name="quantity" min="1" style="width: 200px;" placeholder="1">
-
+</div>
     <!-- <input class="input is-primary" type="text" placeholder="Primary input"> -->
 
     <input name="name" value="<?php echo $name; ?>" type="hidden"></input>
     <input name="barcode" value="<?php echo $barcode; ?>" type="hidden"></input>
-    <br><br>
+    <div class="columns is-centered is-vcentered is-mobile">
     <label for="expiration">Expiration Date:</label>
     <input class="input is-primary" type="date" id="expiration" name="expiration" style="width: 200px;">
-    <br><br>
+</div>
+<div class="columns is-centered is-vcentered is-mobile">
     <input class="button is-primary" type="submit" name="submitAdd" value="Enter">
     <input class="button is-primary" type="submit" value="Go Back">
+</div>
 </form>
     <?php
 
-    echo "<br><br>";
+    echo "<br>";
     $ingredients = $xml->product->ingredients_text_en;
     $ingredients = str_replace(['"',"'"], "", $ingredients);
     if(!is_null($ingredients)) echo "Ingredients: $ingredients";
-    echo "<br>";
 }
 
 if(isset($_POST["submitAdd"])) {

@@ -44,6 +44,17 @@
         text-align: center; 
         vertical-align: middle;
     }
+
+    .border {
+        font-size: 1.6rem;
+        place-items: center;
+        border: 2px solid;
+        padding: 0rem;
+    }
+
+    .full {
+        border-image: linear-gradient(45deg, turquoise, greenyellow) 1;
+    }
 </style>
 <body class = "has-background-success-light">
 <script type="text/javascript">
@@ -110,7 +121,7 @@ while($row = mysqli_fetch_assoc($results)) {
     //$xml = json_decode($xml);
     //$image = urldecode($xml->product->image_front_small_url);
     //$imageData = base64_encode(file_get_contents($image));
-    echo '<td><img id="img_'.$id.'" class="image is-96x96 my-2 has-img-centered" width=300vw></td>';
+    echo '<td><img id="img_'.$id.'" class="full border image my-2 has-img-centered" style="max-height: 128px; max-width: 128px;"></td>';
     ?><script type="text/javascript">
 
     funcs.push(() => {

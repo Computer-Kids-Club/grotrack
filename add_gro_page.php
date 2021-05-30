@@ -156,7 +156,7 @@ while($row = mysqli_fetch_assoc($results)) {
         echo "<td style='text-align: center; vertical-align: middle;' class='has-text-success is-size-4'>" . $row['exp_date'] . "</td>";
     }
     echo "<td style='text-align: center; vertical-align: middle;' class='is-size-4' class='is-size-4'>" . $row['amount'] . "</td>";
-    echo "<td>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['id'].'" class="button is-outlined is-small is-primary mb-1"> Consume </button></form>' . "</td>";
+    echo "<td style='text-align: center; vertical-align: middle;'>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['id'].'" class="button is-outlined is-medium is-primary mb-1"> Consume </button></form>' . "</td>";
     echo "</tr>";
     if($date_diff <= 1 && $date_diff > 0){
         array_push($almost_expired, $row['exp_date']);

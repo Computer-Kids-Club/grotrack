@@ -104,7 +104,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 
     $name = ucwords($xml->product->product_name);
     echo "<div class='columns is-centered is-vcentered is-mobile'>";
-    echo "<p class='is-size-3'>$name</p>";
+    echo "<p class='is-size-3 has-text-weight-bold'>$name</p>";
     echo "</div>";
     $image = urldecode($xml->product->image_front_small_url);
     $imageData = base64_encode(file_get_contents($image));
@@ -180,7 +180,14 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     
 </div>
 
-<br>
+<!-- <br> -->
+<div class="columns is-centered is-vcentered is-mobile">
+    <?php
+    $ingredients = $xml->product->ingredients_text_en;
+    $ingredients = str_replace(['"',"'"], "", $ingredients);
+    if(!is_null($ingredients)) echo "<p class='px-6'> Ingredients: $ingredients </p>";
+    ?>
+    </div>
 
 <form action = "barcode.php" method="post">
 <div class="columns is-centered is-vcentered is-mobile">
@@ -202,10 +209,8 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 </form>
     <?php
 
-    echo "<br>";
-    $ingredients = $xml->product->ingredients_text_en;
-    $ingredients = str_replace(['"',"'"], "", $ingredients);
-    if(!is_null($ingredients)) echo "<p class='px-6'> Ingredients: $ingredients </p>";
+    // echo "<br>";
+    
 }
 
 if(isset($_POST["submitAdd"])) {

@@ -44,26 +44,38 @@ $sort_by = "name";
 if(isset($_GET["sort_by"])){
     $sort_by = $_GET["sort_by"];
 }
+
+
 $host = "localhost:3306";
 if (!is_null($_SERVER["SERVER_NAME"]) && $_SERVER["SERVER_NAME"] ===  "www.grotrack.co") {    
     $host = "localhost:3306";
 }
 $conn = new mysqli($host, "groperson", "gropassword", "groceries");
+
+
 $uuid = $session_uuid;
 $query = "SELECT groceries.id, groceries.name, groceries.amount, groceries.exp_date, groceries.barcode FROM groceries INNER JOIN users ON groceries.user_id = users.id WHERE users.uuid = '".$uuid."' ORDER BY groceries.".$sort_by.";";
 $results = $conn -> query($query);
+
+
 $almost_expired = array();
 $expired = array();
+
+
 date_default_timezone_set('America/Toronto');
 $date = date('Y-m-d H:i:s');
+
+
 echo "<table class = 'has-text-centered has-background-success-light mytable'>";
 echo "<tr>";
-echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="name" class ="button is-ghost is-large"> Grocery Item </button></form></div>' . "</td>";
-echo "<td>" . '<div class = "py-3 mx-3 is-size-4"> Preview Item <div>' . "</td>";
-echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_date" class ="button is-ghost is-large"> Expiration Date </button></form></div>' . "</td>";
+echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="name" class ="button is-ghost is-large"><div class="is-size-2"> Grocery Item </div></button></form></div>' . "</td>";
+echo "<td>" . '<div class = "py-3 mx-3 is-size-2"> Preview Item <div>' . "</td>";
+echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_date" class ="button is-ghost is-large"><div class="is-size-2"> Expiration Date </div></button></form></div>' . "</td>";
 echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amount" class ="button is-ghost is-large"><div class="is-size-2"> Amount </div></button></form></div>' . "</td>";
-echo "<td>" . '<div class = "py-3 mx-3 is-size-4"> Consume <div>' . "</td>";
+echo "<td>" . '<div class = "py-3 mx-3 is-size-2"> Consume <div>' . "</td>";
 echo "</tr>";
+
+
 while($row = mysqli_fetch_assoc($results)) {
     $date_diff = ((strtotime($row['exp_date']) - strtotime($date)))/86400;
     echo"<tr>";
@@ -94,8 +106,12 @@ while($row = mysqli_fetch_assoc($results)) {
     }
 }
 echo "</table>";
+
+
 $num_expiring = sizeof($almost_expired);
 $num_expired = sizeof($expired);
+
+
 if($num_expiring == 1 && !$_GET['no_msg'] && !$_GET['sort_by']){
     if($num_expired == 1){
         echo "<script type='text/javascript'>alert('You have $num_expiring grocery product expiring! You have $num_expired expired grocery product!');</script>";

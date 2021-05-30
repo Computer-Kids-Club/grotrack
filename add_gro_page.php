@@ -175,6 +175,7 @@ while($row = mysqli_fetch_assoc($results)) {
 
             } catch(err) {
                 console.error(err);
+                img_obj.src = "/carrot.png";
             }
         };
 

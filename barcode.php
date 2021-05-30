@@ -203,8 +203,8 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     <input class="input is-primary m-2" type="date" id="expiration" name="expiration" style="width: 200px;">
 </div>
 <div class="columns is-centered is-vcentered is-mobile">
-    <input class="button is-primary m-2" type="submit" name="submitAdd" value="Enter" style="width:100px">
-    <input class="button is-primary m-2" type="submit" value="Go Back" style="width:100px">
+    <input class="button is-primary m-2" type="submit" name="submitAdd" value="Add To Groceries" style="width:150px">
+    <input class="button is-primary m-2" type="submit" value="Go Back" style="width:150px">
 </div>
 </form>
     <?php
@@ -228,8 +228,8 @@ if(isset($_POST["submitAdd"])) {
     $row = mysqli_fetch_assoc($results);
     $id = $row["id"];
     $query = "INSERT INTO groceries VALUES (NULL, '$barcode', '$name', '$quantity', '$expr_date', '$id')";
-    var_dump($query);
     $results = $conn -> query($query);
+    echo "<script type='text/javascript'>alert('$name has been added to your groceries.');</script>";
 }
 ?>
 

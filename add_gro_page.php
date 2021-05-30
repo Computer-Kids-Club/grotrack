@@ -100,16 +100,18 @@ while($row = mysqli_fetch_assoc($results)) {
     echo"<tr>";
     echo "<td class='is-size-4'>" . $row['name'] . "</td>";
     $barcode = $row['barcode'];
+    $id = $row['id'];
     //$xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
     //$xml = json_decode($xml);
     //$image = urldecode($xml->product->image_front_small_url);
     //$imageData = base64_encode(file_get_contents($image));
-    echo '<td><img id="img_'.$barcode.'" class="image is-96x96 my-2 has-img-centered" width=300vw></td>';
+    echo '<td><img id="img_'.$id.'" class="image is-96x96 my-2 has-img-centered" width=300vw></td>';
     ?><script type="text/javascript">
 
     funcs.push(() => {
         let barcode = <?php echo $barcode; ?>;
-        let img_obj = document.getElementById("img_" + barcode);
+        let id = <?php echo $id; ?>;
+        let img_obj = document.getElementById("img_" + id);
 
         let url = "https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json";
 
@@ -119,14 +121,20 @@ while($row = mysqli_fetch_assoc($results)) {
         xhr.open("GET", url, true);
         xhr.send();
         xhr.onload = function () {
-            //console.log("Got Response!");
-            //console.log("Response: " + xhr.responseText);
+            try {
 
-            var response_obj = JSON.parse(xhr.responseText);
+                //console.log("Got Response!");
+                //console.log("Response: " + xhr.responseText);
 
-            //console.log(response_obj.product.image_front_small_url);
+                var response_obj = JSON.parse(xhr.responseText);
 
-            img_obj.src = response_obj.product.image_front_small_url;
+                //console.log(response_obj.product.image_front_small_url);
+
+                img_obj.src = response_obj.product.image_front_small_url;
+
+            } catch(err) {
+                console.error(err);
+            }
         };
 
         img_obj.src = "/carrot.png";

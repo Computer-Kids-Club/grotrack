@@ -35,9 +35,14 @@
         margin-left:auto;
         margin-right:auto;
     }
-    td.has-text-centered{
-        margin-left:auto;
-        margin-right:auto;
+    td {
+        height: 50px; 
+        width: 50px;
+    }
+
+    td {
+        text-align: center; 
+        vertical-align: middle;
     }
 </style>
 <body class = "has-background-success-light">
@@ -98,7 +103,7 @@ echo "</tr>";
 while($row = mysqli_fetch_assoc($results)) {
     $date_diff = ((strtotime($row['exp_date']) - strtotime($date)))/86400;
     echo"<tr>";
-    echo "<td class='is-size-4'>" . $row['name'] . "</td>";
+    echo "<td style='text-align: center; vertical-align: middle;' class='is-size-4'>" . $row['name'] . "</td>";
     $barcode = $row['barcode'];
     $id = $row['id'];
     //$xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
@@ -115,7 +120,7 @@ while($row = mysqli_fetch_assoc($results)) {
 
         let url = "https://world.openfoodfacts.org/api/v0/product/" + barcode + ".json";
 
-        //console.log(url);
+        console.log(url);
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);

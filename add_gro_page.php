@@ -52,7 +52,11 @@ let funcs = [];
 
 window.onload = function() {
     for (var key in funcs) {
-        funcs[key](); // run your function
+        try {
+            funcs[key](); // run your function
+        } catch(err) {
+            console.error(err);
+        }
     }
 }
 

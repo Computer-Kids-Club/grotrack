@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="coolertable.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
-<body>
+<body class="has-background-success-light">
 
 <?php include 'header.php';?>
 
@@ -22,11 +22,11 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 ?>
     <div class="columns is-centered is-vcentered is-mobile">
         <br><br>
-    <p>Scan Barcode Below:</p>
+    <p class="is-size-2">Scan Barcode Below:</p>
 </div>
     <div class="columns is-centered is-vcentered is-mobile">
     <div>
-        <canvas id="canvas" width="1vw" height="2vw" style="border: 1px solid gray"></canvas>
+        <canvas id="canvas" width="1000" height="200" style="border: 1px solid gray"></canvas>
     </div>
 </div>
 
@@ -35,12 +35,12 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     <!-- <label>Barcode Scanned:</label>
     <pre><code id="result"></code></pre> -->
     <div class="columns is-centered is-vcentered is-mobile">
-    <p>Or Manually Add It Here:</p>
+    <p class="is-size-5">Or Manually Add It Here:</p>
     </div>
     <div class="columns is-centered is-vcentered is-mobile">
     <form action="barcode.php" method="post">
     <!-- Barcode: <input type="text" name="barcode"> -->
-    Barcode: <input class="input is-primary" id="txt" type="text" name="barcode" placeholder="e.g. 737628064502" style="width: 200px;" onkeyup="manage(this)">
+    <input class="input is-primary" id="txt" type="text" name="barcode" placeholder="e.g. 737628064502" style="width: 200px;" onkeyup="manage(this)">
     <input class="button is-primary" id="btSubmit" type="submit" name="submitBarcode" value="Enter" disabled>
     </form>
 </div>
@@ -59,7 +59,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 
     <div id="sourceSelectPanel" style="display:none">
         <label for="sourceSelect">Change video source:</label>
-        <select id="sourceSelect" style="max-width:400px">
+        <select id="sourceSelect" style="max-width:800px">
         </select>
     </div>
  
@@ -104,7 +104,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 
     $name = ucwords($xml->product->product_name);
     echo "<div class='columns is-centered is-vcentered is-mobile'>";
-    echo "<h2>$name</h2>";
+    echo "<p class='is-size-3'>$name</p>";
     echo "</div>";
     $image = urldecode($xml->product->image_front_small_url);
     $imageData = base64_encode(file_get_contents($image));
@@ -185,7 +185,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 <form action = "barcode.php" method="post">
 <div class="columns is-centered is-vcentered is-mobile">
     <label for="quantity">Quantity:</label>
-    <input class="input is-primary" type="number" id="quantity" name="quantity" min="1" style="width: 200px;" placeholder="1">
+    <input class="input is-primary m-2" type="number" id="quantity" name="quantity" min="1" style="width: 200px;" placeholder="1">
 </div>
     <!-- <input class="input is-primary" type="text" placeholder="Primary input"> -->
 
@@ -193,11 +193,11 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     <input name="barcode" value="<?php echo $barcode; ?>" type="hidden"></input>
     <div class="columns is-centered is-vcentered is-mobile">
     <label for="expiration">Expiration Date:</label>
-    <input class="input is-primary" type="date" id="expiration" name="expiration" style="width: 200px;">
+    <input class="input is-primary m-2" type="date" id="expiration" name="expiration" style="width: 200px;">
 </div>
 <div class="columns is-centered is-vcentered is-mobile">
-    <input class="button is-primary" type="submit" name="submitAdd" value="Enter">
-    <input class="button is-primary" type="submit" value="Go Back">
+    <input class="button is-primary m-2" type="submit" name="submitAdd" value="Enter" style="width:100px">
+    <input class="button is-primary m-2" type="submit" value="Go Back" style="width:100px">
 </div>
 </form>
     <?php
@@ -205,7 +205,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     echo "<br>";
     $ingredients = $xml->product->ingredients_text_en;
     $ingredients = str_replace(['"',"'"], "", $ingredients);
-    if(!is_null($ingredients)) echo "Ingredients: $ingredients";
+    if(!is_null($ingredients)) echo "<p class='px-6'> Ingredients: $ingredients </p>";
 }
 
 if(isset($_POST["submitAdd"])) {

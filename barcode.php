@@ -99,7 +99,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     $xml = json_decode($xml);
 
     echo $xml->status;
-    $url = "https://grotrack.co/barcode.php";
+    $url = "/barcode.php";
     if($xml->status != 1) header("Location: $url");
 
     $name = ucwords($xml->product->product_name);

@@ -31,6 +31,10 @@
         margin-left: auto;
         margin-right: auto;
     }
+    img.has-img-centered{
+        margin-left:auto;
+        margin-right:auto;
+    }
 </style>
 <body class = "has-background-success-light">
 <?php include 'header.php';?>
@@ -55,24 +59,31 @@ $date = date('Y-m-d H:i:s');
 echo "<table class = 'has-text-centered has-background-success-light mytable'>";
 echo "<tr>";
 echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="name" class ="button is-ghost is-large"> Grocery Item </button></form></div>' . "</td>";
+echo "<td>" . '<div class = "py-3 mx-3 is-size-4"> Preview Item <div>' . "</td>";
 echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="exp_date" class ="button is-ghost is-large"> Expiration Date </button></form></div>' . "</td>";
-echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amount" class ="button is-ghost is-large"> Amount </button></form></div>' . "</td>";
+echo "<td>" . '<div class = "mx-3"><form action="add_gro_page.php" method="get"><button name="sort_by" value="amount" class ="button is-ghost is-large"><div class="is-size-2"> Amount </div></button></form></div>' . "</td>";
 echo "<td>" . '<div class = "py-3 mx-3 is-size-4"> Consume <div>' . "</td>";
 echo "</tr>";
 while($row = mysqli_fetch_assoc($results)) {
     $date_diff = ((strtotime($row['exp_date']) - strtotime($date)))/86400;
     echo"<tr>";
-    echo "<td>" . $row['name'] . "</td>";
+    echo "<td class='is-size-3'>" . $row['name'] . "</td>";
+    $barcode = $row['barcode'];
+    $xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
+    $xml = json_decode($xml);
+    $image = urldecode($xml->product->image_front_small_url);
+    $imageData = base64_encode(file_get_contents($image));
+    echo '<td><img class="image is-96x96 my-2 has-img-centered" src="data:image/jpeg;base64,'.$imageData.'" width=300vw></td>';
     if($date_diff <= 1 && $date_diff > 0){
-        echo "<td class='has-text-warning'>" . $row['exp_date'] . "</td>";
+        echo "<td class='has-text-warning is-size-3'>" . $row['exp_date'] . "</td>";
     }
     elseif($date_diff <= 0){
-        echo "<td class='has-text-danger'>" . $row['exp_date'] . "</td>";
+        echo "<td class='has-text-danger is-size-3'>" . $row['exp_date'] . "</td>";
     }
     else{
-        echo "<td class='has-text-success'>" . $row['exp_date'] . "</td>";
+        echo "<td class='has-text-success is-size-3'>" . $row['exp_date'] . "</td>";
     }
-    echo "<td>" . $row['amount'] . "</td>";
+    echo "<td class='is-size-3'>" . $row['amount'] . "</td>";
     echo "<td>" . '<form action="update_amount.php" method="get"><button name="id" value="'.$row['id'].'" class="button is-outlined is-small is-primary mb-1"> Consume </button></form>' . "</td>";
     echo "</tr>";
     if($date_diff <= 1 && $date_diff > 0){

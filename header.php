@@ -3,6 +3,12 @@
 
 <?php include 'session.php';?>
 
+<style type="text/css">
+    * {
+        cursor: url(carrot.png), auto !important;
+    }
+</style>
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item is-size-3" href="/">

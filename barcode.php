@@ -4,7 +4,6 @@
 <head>
     <link rel="stylesheet" href="coolertable.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-
 </head>
 <body>
 
@@ -21,33 +20,48 @@ $barcode = 0;
 $name = NULL;
 if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
 ?>
+    <div class="columns is-centered is-vcentered is-mobile">
+        <br><br>
+    <p>Scan Barcode Below:</p>
+</div>
+    <div class="columns is-centered is-vcentered is-mobile">
+    <div>
+        <canvas id="canvas" width="1vw" height="2vw" style="border: 1px solid gray"></canvas>
+    </div>
+</div>
 
-    <button type="button" id="startButton">Scan Barcode</button>
-    <button type="button" id="resetButton">Reset</button>
     <br>
 
-    <form action="barcode.php" method="post">
-    Barcode: <input type="text" name="barcode"><br>
-    <input type="submit" name="submitBarcode" value="Enter">
-    </form>
-
-    <div>
-        <canvas id="canvas" width="600" height="400" style="border: 1px solid gray"></canvas>
+    <!-- <label>Barcode Scanned:</label>
+    <pre><code id="result"></code></pre> -->
+    <div class="columns is-centered is-vcentered is-mobile">
+    <p>Or Manually Add It Here:</p>
     </div>
+    <div class="columns is-centered is-vcentered is-mobile">
+    <form action="barcode.php" method="post">
+    <!-- Barcode: <input type="text" name="barcode"> -->
+    Barcode: <input class="input is-primary" id="txt" type="text" name="barcode" placeholder="e.g. 737628064502" style="width: 200px;" onkeyup="manage(this)">
+    <input class="button is-primary" id="btSubmit" type="submit" name="submitBarcode" value="Enter" disabled>
+    </form>
+</div>
+
+    <script>
+    function manage(txt) {
+        var bt = document.getElementById('btSubmit');
+        if (txt.value != '') {
+            bt.disabled = false;
+        }
+        else {
+            bt.disabled = true;
+        }
+    }
+    </script>
 
     <div id="sourceSelectPanel" style="display:none">
         <label for="sourceSelect">Change video source:</label>
         <select id="sourceSelect" style="max-width:400px">
         </select>
     </div>
-
-    <label>Result:</label>
-    <pre><code id="result"></code></pre>
-
-    <hr>
-        <select></select>
-        <hr>
-        <ul></ul>
  
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/qrcodelib.js"></script>
@@ -60,7 +74,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
                 if(count % 3 == 0) {
                     window.location.href="barcode.php?bc="+result.code
                 }
-                $('body').append($('<li>' + result.format + ': ' + result.code + '</li>'));
+                // $('body').append($(result.code));
             }
         };
         var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
@@ -74,6 +88,7 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
             decoder.stop().play();
         });
     </script>
+    <!-- </div> -->
 
 <?php
 } else {
@@ -90,6 +105,10 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
     // $barcode = <code id="result"></code>;
     $xml = file_get_contents("https://world.openfoodfacts.org/api/v0/product/$barcode.json");
     $xml = json_decode($xml);
+
+    echo $xml->status;
+    $url = "https://grotrack.co/barcode.php";
+    if($xml->status != 1) header("Location: $url");
     // var_dump($xml);
 
     $name = ucwords($xml->product->product_name);
@@ -166,67 +185,50 @@ if (!isset($_GET['bc']) && !isset($_POST['submitBarcode'])) {
         </table>
     </section>
 </div>
+
+<br>
+
+<form action = "barcode.php" method="post">
+    <label for="quantity">Quantity:</label>
+    <input class="input is-primary" type="number" id="quantity" name="quantity" min="1" style="width: 200px;" placeholder="1">
+
+    <!-- <input class="input is-primary" type="text" placeholder="Primary input"> -->
+
+    <input name="name" value="<?php echo $name; ?>" type="hidden"></input>
+    <input name="barcode" value="<?php echo $barcode; ?>" type="hidden"></input>
+    <br><br>
+    <label for="expiration">Expiration Date:</label>
+    <input class="input is-primary" type="date" id="expiration" name="expiration" style="width: 200px;">
+    <br><br>
+    <input class="button is-primary" type="submit" name="submitAdd" value="Enter">
+    <input class="button is-primary" type="submit" value="Go Back">
+</form>
     <?php
 
     echo "<br><br>";
-    $ingredients = json_encode($xml->product->ingredients_text_en);
+    $ingredients = $xml->product->ingredients_text_en;
     $ingredients = str_replace(['"',"'"], "", $ingredients);
     if(!is_null($ingredients)) echo "Ingredients: $ingredients";
     echo "<br>";
 }
 
-?>
-<!-- <br>
-
-
-<br>
-
-<br>
-<form action="barcode.php" method="post">
-    
-</form> -->
-
-<form action = "barcode.php" method="post">
-    <label for="quantity">Quantity:</label>
-    <input name="name" value="<?php echo $name; ?>" type="hidden"></input>
-    <input name="barcode" value="<?php echo $barcode; ?>" type="hidden"></input>
-    <input type="number" id="quantity" name="quantity" min="1">
-    <label for="expiration">Expiration Date:</label>
-    <input type="date" id="expiration" name="expiration">
-    <input type="submit" name="submitAdd" value="Enter">
-    <input type="submit" value="Go Back">
-</form>
-
-
-
-<?php
 if(isset($_POST["submitAdd"])) {
     $quantity = $_POST['quantity'];
     $expr_date = date('Y-m-d', strtotime($_POST['expiration']));
     $name = $_POST['name'];
     $barcode = $_POST['barcode'];
 
-    // var_dump($_POST);
-
     $host = "localhost:3306";
     $conn = new mysqli($host, "groperson", "gropassword", "groceries");
-    // $query = "SELECT id, name, amount, exp_date FROM groceries;";
-    // $uuid = "GRO-60b2b1d74df73";
     $uuid = $session_uuid;
 
     $idQuery = "SELECT id FROM users WHERE uuid='$uuid'";
     $results = $conn -> query($idQuery);
     $row = mysqli_fetch_assoc($results);
     $id = $row["id"];
-    // echo "tests ", $name, "     daw ", $barcode;
-    // echo "Quantity: ", $quantity, " Expiration: ". $expr_date, " Name: ", $name, " Barcode: ", $barcode;
-
-
-
     $query = "INSERT INTO groceries VALUES (NULL, '$barcode', '$name', '$quantity', '$expr_date', '$id')";
     var_dump($query);
     $results = $conn -> query($query);
-    // var_dump($results);
 }
 ?>
 

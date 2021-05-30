@@ -228,7 +228,6 @@ if(isset($_POST["submitAdd"])) {
     $row = mysqli_fetch_assoc($results);
     $id = $row["id"];
     $query = "INSERT INTO groceries VALUES (NULL, '$barcode', '$name', '$quantity', '$expr_date', '$id')";
-    var_dump($query);
     $results = $conn -> query($query);
 }
 ?>
